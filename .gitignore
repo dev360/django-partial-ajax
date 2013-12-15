@@ -3,6 +3,12 @@
 # C extensions
 *.so
 
+# Vim
+*.swo
+*.swp
+
+.DS_Store
+
 # Packages
 *.egg
 *.egg-info
