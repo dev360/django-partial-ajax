@@ -1,0 +1,78 @@
+{% load partials %}
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,300,400italic,400,600italic,600,700italic,700,800italic,800" rel="stylesheet" type="text/css">
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+</head>
+<style type="text/css">
+  body {
+    font-family: 'Open Sans';
+    color: #333;
+  }
+  .section {
+    border: 1px solid #ababab; 
+    padding: 10px;
+    background: #efefef;
+  }
+</style>
+<script type="text/javascript">
+
+  var onSort = function() {
+    var ctrl = $(this);
+    var partial = ctrl.attr('data-partial');
+    var params = ctrl.attr('data-param');
+    console.log('fuck');
+     
+    $.ajax({
+      url: '?partial=' + partial + '&' + params,
+    }).done(function(html){
+      $('table thead th').unbind("click");
+      $('.section').html(html);
+      bindOnSort();
+    });
+  };
+
+  var bindOnSort = function(){
+    $('table thead th').click(onSort);
+  };
+
+  $(document).ready(function(){
+    bindOnSort();
+  });
+</script>
+<body>
+  <h1>Partial Ajax Test</h1>
+  <div class="section">
+    {% partial table %}
+    <h2>Gaugers</h2>
+    <table>
+      <thead>
+        <tr>
+          {% if sort_attr == 'first_name' and sort_dir == 'asc' %}
+          <th data-partial="table" data-param="sort_attr=first_name&sort_dir=desc">First name</th>
+          {% else %}
+          <th data-partial="table" data-param="sort_attr=first_name&sort_dir=asc">First name</th>
+          {% endif %}
+
+          {% if sort_attr == 'last_name' and sort_dir == 'asc' %}
+          <th data-partial="table" data-param="sort_attr=last_name&sort_dir=desc">Last name</th>
+          {% else %}
+          <th data-partial="table" data-param="sort_attr=last_name&sort_dir=asc">Last name</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for contact in contacts %}
+        <tr>
+          <td>{{ contact.first_name }}</td>
+          <td>{{ contact.last_name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endpartial %}
+  </div>
+</body>
+</html>
